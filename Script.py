@@ -30,7 +30,7 @@ def verificar_portas(site):
 
 def consultar_protocolo(site):
     try:
-        _, _, protocolo = socket.getaddrinfo(site, None)[0]
+        _, _, _, _, _, protocolo = socket.getaddrinfo(site, None)[0]
         if protocolo == socket.SOCK_STREAM:
             print(f"\n\u25B6 O site {site} utiliza o protocolo TCP.")
         elif protocolo == socket.SOCK_DGRAM:
@@ -79,4 +79,4 @@ if __name__ == "__main__":
             break
         else:
             print("Opção inválida. Digite novamente.")
-        
+            
