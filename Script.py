@@ -30,11 +30,15 @@ def verificar_portas(site):
 
 def consultar_protocolo(site):
     try:
-        _, _, _, _, _, protocolo = socket.getaddrinfo(site, None)[0]
-        if protocolo == socket.SOCK_STREAM:
-            print(f"\n\u25B6 O site {site} utiliza o protocolo TCP.")
-        elif protocolo == socket.SOCK_DGRAM:
-            print(f"\n\u25B6 O site {site} utiliza o protocolo UDP.")
+        protocolo = socket.getaddrinfo(site, None)
+        if protocolo:
+            protocolo = protocolo[0][1]
+            if protocolo == socket.SOCK_STREAM:
+                print(f"\n\u25B6 O site {site} utiliza o protocolo TCP.")
+            elif protocolo == socket.SOCK_DGRAM:
+                print(f"\n\u25B6 O site {site} utiliza o protocolo UDP.")
+        else:
+            print(f"\n\u274C Não foi possível consultar o protocolo do site {site}.")
     except socket.gaierror:
         print(f"\n\u274C Não foi possível consultar o protocolo do site {site}.")
     input("\nPressione Enter para continuar...")
