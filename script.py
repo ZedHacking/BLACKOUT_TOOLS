@@ -310,29 +310,24 @@ def exibir_menu():
             consultar_whois(site)
 
         elif opcao == "7":
-            site = input("Digite o site para simular teste de força bruta: ")
-            usuario = input("Digite o nome de usuário para o teste de força bruta: ")
-            simular_teste_forca_bruta(site, usuario)
-
-        elif opcao == "8":
             site = input("Digite o site para verificar exposição em bases de dados de brechas: ")
             verificar_exposicao_brechas_dados(site)
 
-        elif opcao == "9":
+        elif opcao == "8":
             site = input("Digite o site para consultar subdomínios: ")
             consultar_subdominios(site)
 
-        elif opcao == "10":
+        elif opcao == "9":
             site = input("Digite o site para verificar se utiliza UDP ou TCP: ")
             verificar_udp_tcp(site)
 
-        elif opcao == "11":
+        elif opcao == "10":
             grupo_telegram()
 
-        elif opcao == "12":
+        elif opcao == "11":
             creditos()
 
-        elif opcao == "13":
+        elif opcao == "12":
             site = input("Digite o site para encontrar o painel de administração: ")
             encontrar_painel_administracao(site)
 
