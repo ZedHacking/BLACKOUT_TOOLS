@@ -12,15 +12,17 @@ def consultar_ip(site):
 
 def verificar_portas(site):
     try:
-        print(f"\n\u25B6 Verificando as 5 primeiras portas abertas do site {site}:")
-        for porta in range(1, 6):
+        print(f"\n\u25B6 Procurando por portas abertas no site {site}...")
+        for porta in range(1, 65536):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(1)
             resultado = sock.connect_ex((site, porta))
             if resultado == 0:
                 print(f"\u2713 A porta {porta} está aberta.")
-            else:
-                print(f"\u2717 A porta {porta} está fechada.")
+                break
             sock.close()
+        else:
+            print(f"\u274C Nenhuma porta aberta encontrada no site {site}.")
     except socket.gaierror:
         print(f"\n\u274C Não foi possível verificar as portas do site {site}.")
     input("\nPressione Enter para continuar...")
@@ -54,7 +56,7 @@ if __name__ == "__main__":
         print("           \u2605 Menu Principal \u2605          ")
         print("=====================================")
         print("1. Consultar IP de um site")
-        print("2. Verificar 5 portas abertas de um site")
+        print("2. Verificar portas abertas de um site")
         print("3. Consultar se o site é UDP ou TCP")
         print("4. Créditos")
         print("5. Sair")
@@ -77,4 +79,4 @@ if __name__ == "__main__":
             break
         else:
             print("Opção inválida. Digite novamente.")
-            
+        
