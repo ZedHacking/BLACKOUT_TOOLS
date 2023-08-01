@@ -20,20 +20,33 @@ def consultar_ip(site):
 def verificar_portas(site):
     try:
         print(f"\nVerificando as 5 primeiras portas abertas de {site}...")
+        count_portas_abertas = 0  # Variável para contar as portas abertas
+
         for porta in range(1, 6):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(2)
             resultado = sock.connect_ex((site, porta))
             if resultado == 0:
                 print(f"A porta {porta} está aberta.")
+                count_portas_abertas += 1
+                if count_portas_abertas >= 2:  # Para aqui se encontrar pelo menos 2 portas abertas
+                    break
             else:
                 print(f"A porta {porta} está fechada.")
+
+        if count_portas_abertas == 0:
+            print("Nenhuma porta aberta encontrada.")
+        elif count_portas_abertas == 1:
+            print("Apenas uma porta aberta encontrada.")
+        else:
+            print(f"Total de {count_portas_abertas} portas abertas encontradas.")
 
     except socket.gaierror:
         print(f"Não foi possível verificar as portas de {site}")
 
     input("\nPressione Enter para continuar...")
     os.system("clear")
+                
 
 # Função para verificar se o site possui SSL/TLS habilitado
 def verificar_seguranca_ssl(site):
@@ -198,7 +211,7 @@ def creditos():
     print("           ★ Créditos ★          ")
     print("=====================================")
     print("Desenvolvido por: Zed Hacking")
-    print("GitHub: https://github.com/zed-hacking")
+    print("Telegram: @ZedHacking")
     print("=====================================\n")
 
     input("Pressione Enter para voltar ao menu...")
