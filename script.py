@@ -46,7 +46,6 @@ def verificar_portas(site):
 
     input("\nPressione Enter para continuar...")
     os.system("clear")
-                
 
 # Função para verificar se o site possui SSL/TLS habilitado
 def verificar_seguranca_ssl(site):
@@ -179,16 +178,61 @@ def consultar_subdominios(site):
     input("\nPressione Enter para continuar...")
     os.system("clear")
 
+import socket
+
 # Função para verificar se o site utiliza UDP ou TCP
 def verificar_udp_tcp(site):
     try:
         print(f"\nVerificando se o site {site} utiliza UDP ou TCP...")
-        # Código para verificar se o site utiliza UDP ou TCP
-        # Exemplo simples:
-        print(f"O site {site} utiliza TCP.")
+        
+        # Verificando o protocolo utilizado pelas portas 80 (HTTP) e 443 (HTTPS)
+        http_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        http_socket.settimeout(2)
+        http_resultado = http_socket.connect_ex((site, 80))
+
+        https_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        https_socket.settimeout(2)
+        https_resultado = https_socket.connect_ex((site, 443))
+
+        if http_resultado == 0 and https_resultado == 0:
+            print(f"O site {site} pode utilizar tanto UDP quanto TCP.")
+        elif http_resultado == 0:
+            print(f"O site {site} utiliza o protocolo TCP (HTTP).")
+        elif https_resultado == 0:
+            print(f"O site {site} utiliza o protocolo TCP (HTTPS).")
+        else:
+            print(f"Não foi possível determinar se o site {site} utiliza UDP ou TCP.")
 
     except Exception as e:
         print(f"Ocorreu um erro durante a verificação de UDP/TCP: {e}")
+
+    input("\nPressione Enter para continuar...")
+    os.system("clear")
+
+# Função para encontrar painéis de administração em um site
+def encontrar_painel_administracao(site):
+    try:
+        print(f"\nProcurando painel de administração em {site}...")
+
+        # Lista com possíveis URLs de painéis de administração
+        paineis_administracao = [
+            "admin", "adm", "login", "wp-admin", "administrator",
+            "admin/login", "admin_area", "admin-login", "adminlogin",
+            "panel-administracion", "admin1", "admin2", "admin3",
+        ]
+
+        for painel in paineis_administracao:
+            url = f"https://{site}/{painel}/"
+            resposta = requests.get(url)
+
+            if resposta.status_code == 200:
+                print(f"Painel de administração encontrado: {url}")
+                break
+        else:
+            print("Nenhum painel de administração encontrado.")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Ocorreu um erro durante a busca por painéis de administração: {e}")
 
     input("\nPressione Enter para continuar...")
     os.system("clear")
@@ -222,7 +266,7 @@ def exibir_menu():
     while True:
         os.system("clear")
         print("=====================================")
-        print("           ★ Menu ★          ")
+        print("     ★ BLACKOUT SECURITY ★          ")
         print("=====================================")
         print("1. Consultar IP de um site")
         print("2. Verificar portas abertas de um site")
@@ -230,12 +274,12 @@ def exibir_menu():
         print("4. Verificar se o site está online")
         print("5. Identificar vulnerabilidades SQL em um site")
         print("6. Consultar informações WHOIS de um site")
-        print("7. Simular teste de força bruta em formulários de login")
-        print("8. Verificar exposição em bases de dados de brechas")
-        print("9. Consultar subdomínios de um site")
-        print("10. Verificar se o site utiliza UDP ou TCP")
-        print("11. Grupo do Telegram")
-        print("12. Créditos")
+        print("7. Verificar exposição em bases de dados de brechas")
+        print("8. Consultar subdomínios de um site")
+        print("9. Verificar se o site utiliza UDP ou TCP")
+        print("10. Grupo do Telegram")
+        print("11. Créditos")
+        print("12. Encontrar painel de administração de um site")
         print("0. Sair")
         print("=====================================")
 
@@ -288,6 +332,10 @@ def exibir_menu():
         elif opcao == "12":
             creditos()
 
+        elif opcao == "13":
+            site = input("Digite o site para encontrar o painel de administração: ")
+            encontrar_painel_administracao(site)
+
         elif opcao == "0":
             print("Saindo do menu...")
             break
@@ -297,3 +345,4 @@ def exibir_menu():
 
 if __name__ == "__main__":
     exibir_menu()
+    
