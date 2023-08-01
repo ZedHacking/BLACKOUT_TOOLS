@@ -1,28 +1,56 @@
 import socket
 
-# Obtém o nome do site
-site_name = input("Digite o nome do site: ")
-
-# Obtém o IP do site
-site_ip = socket.gethostbyname(site_name)
-
-# Verifica as portas abertas no site
-open_ports = []
-for port in range(1, 65535):
+def consultar_ip(site):
     try:
-        socket.create_connection((site_ip, port), 2)
-        open_ports.append(port)
-    except socket.error:
-        pass
+        ip = socket.gethostbyname(site)
+        print(f"O IP do site {site} é: {ip}")
+    except socket.gaierror:
+        print(f"Não foi possível encontrar o IP do site {site}.")
 
-# Exibe as 5 primeiras portas abertas
-if len(open_ports) <= 5:
-    print("Portas abertas:", open_ports)
-else:
-    print("Portas abertas:", open_ports[:5])
+def verificar_portas(site):
+    try:
+        for porta in range(1, 6):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            resultado = sock.connect_ex((site, porta))
+            if resultado == 0:
+                print(f"A porta {porta} do site {site} está aberta.")
+            else:
+                print(f"A porta {porta} do site {site} está fechada.")
+            sock.close()
+    except socket.gaierror:
+        print(f"Não foi possível verificar as portas do site {site}.")
 
-# Identifica se o site usa TCP ou UDP
-if socket.getservbyport(80, "tcp") == site_ip:
-    print(f"O site usa TCP.")
-else:
-    print(f"O site usa UDP.")
+def consultar_protocolo(site):
+    try:
+        _, _, protocolo = socket.getaddrinfo(site, None)[0]
+        if protocolo == socket.SOCK_STREAM:
+            print(f"O site {site} utiliza o protocolo TCP.")
+        elif protocolo == socket.SOCK_DGRAM:
+            print(f"O site {site} utiliza o protocolo UDP.")
+    except socket.gaierror:
+        print(f"Não foi possível consultar o protocolo do site {site}.")
+
+if __name__ == "__main__":
+    while True:
+        print("\nMenu:")
+        print("1. Consultar IP de um site")
+        print("2. Verificar 5 portas abertas de um site")
+        print("3. Consultar se o site é UDP ou TCP")
+        print("4. Sair")
+
+        opcao = input("Digite o número da opção desejada: ")
+
+        if opcao == "1":
+            site = input("Digite o nome do site: ")
+            consultar_ip(site)
+        elif opcao == "2":
+            site = input("Digite o nome do site: ")
+            verificar_portas(site)
+        elif opcao == "3":
+            site = input("Digite o nome do site: ")
+            consultar_protocolo(site)
+        elif opcao == "4":
+            print("Encerrando o programa...")
+            break
+        else:
+            print("Opção inválida. Digite novamente.")
