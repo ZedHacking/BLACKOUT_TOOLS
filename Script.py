@@ -1,93 +1,46 @@
-import socket
 import os
 import requests
-import subprocess
 
-def consultar_ip(site):
+# ... Resto das funções ...
+
+def expo_brechas_dados(site):
     try:
-        ip = socket.gethostbyname(site)
-        print(f"\n\u25B6 O IP do site {site} é: {ip}")
-    except socket.gaierror:
-        print(f"\n\u274C Não foi possível encontrar o IP do site {site}.")
+        print(f"\n\u25B6 Verificando exposição de {site} em bases de dados de brechas de dados...")
+        # Código para verificar exposição de dados usando a API Have I Been Pwned
+
+        # ...
+
+    except Exception as e:
+        print(f"\u274C Ocorreu um erro durante a verificação de exposição de dados: {e}")
+
     input("\nPressione Enter para continuar...")
     os.system("clear")
 
-def verificar_portas(site):
-    try:
-        print(f"\n\u25B6 Procurando por portas abertas no site {site}...")
-        for porta in range(1, 65536):
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)
-            resultado = sock.connect_ex((site, porta))
-            if resultado == 0:
-                print(f"\u2713 A porta {porta} está aberta.")
-                break
-            sock.close()
-        else:
-            print(f"\u274C Nenhuma porta aberta encontrada no site {site}.")
-    except socket.gaierror:
-        print(f"\n\u274C Não foi possível verificar as portas do site {site}.")
-    input("\nPressione Enter para continuar...")
-    os.system("clear")
-
-def consultar_protocolo(site):
-    try:
-        protocolo = socket.getaddrinfo(site, None)
-        if protocolo:
-            protocolo = protocolo[0][1]
-            if protocolo == socket.SOCK_STREAM:
-                print(f"\n\u25B6 O site {site} utiliza o protocolo TCP.")
-            elif protocolo == socket.SOCK_DGRAM:
-                print(f"\n\u25B6 O site {site} utiliza o protocolo UDP.")
-        else:
-            print(f"\n\u274C Não foi possível consultar o protocolo do site {site}.")
-    except socket.gaierror:
-        print(f"\n\u274C Não foi possível consultar o protocolo do site {site}.")
-    input("\nPressione Enter para continuar...")
-    os.system("clear")
-
-def verificar_site_proxy(site):
-    proxies = {
-        "http": "http://proxy.example.com:8080",
-        "https": "https://proxy.example.com:8080"
-    }
-    try:
-        response = requests.get(f"http://{site}", proxies=proxies, timeout=10)
-        if response.status_code == 200:
-            print(f"\n\u2713 O site {site} está online.")
-        else:
-            print(f"\u274C O site {site} está fora do ar.")
-    except requests.exceptions.RequestException:
-        print(f"\u274C O site {site} está fora do ar.")
-    input("\nPressione Enter para continuar...")
-    os.system("clear")
-
-def identificar_vulnerabilidades_sql(site):
-    try:
-        subprocess.run(["sqlmap", "-u", f"http://{site}"])
-    except FileNotFoundError:
-        print("\u274C O sqlmap não está instalado ou não está disponível no sistema.")
-    input("\nPressione Enter para continuar...")
-    os.system("clear")
-
+# Função para exibir os créditos
 def creditos():
-    os.system("clear")
+    print("\n=====================================")
+    print("           \u2605 Créditos \u2605          ")
     print("=====================================")
-    print("            \u2705 Créditos \u2705           ")
-    print("=====================================")
-    print("\nZed Hacking - Kiba não putinha")
-    input("\nPressione Enter para voltar ao menu...")
+    print("Desenvolvido por: Zed Hacking")
+    print("Telegram: @Zedhacking")
+    print("=====================================\n")
+
+    input("Pressione Enter para voltar ao menu...")
     os.system("clear")
 
+# Função para exibir o grupo do Telegram
 def grupo_telegram():
-    os.system("clear")
+    print("\n=====================================")
+    print("        \u2605 Grupo do Telegram \u2605       ")
     print("=====================================")
-    print("        \u2605 Grupo do Telegram \u2605      ")
-    print("=====================================")
-    print("\nJunte-se ao nosso grupo do Telegram para receber atualizações, dicas e discussões sobre segurança digital e hacking:")
-    print("Link do grupo: https://t.me/BlackoutTeamOfc")
-    input("\nPressione Enter para voltar ao menu...")
+    print("Junte-se ao nosso grupo do Telegram:")
+    print("Link: https://t.me/BlackoutTeamOfc")
+    print("=====================================\n")
+
+    input("Pressione Enter para voltar ao menu...")
     os.system("clear")
+
+# ... Resto do código ...
 
 if __name__ == "__main__":
     while True:
@@ -95,16 +48,21 @@ if __name__ == "__main__":
         print("=====================================")
         print("           \u2605 Menu Principal \u2605          ")
         print("=====================================")
-        print("1. Consultar IP de um site")
-        print("2. Verificar portas abertas de um site")
-        print("3. Consultar se o site é UDP ou TCP")
-        print("4. Verificar se o site está fora do ar por meio de Proxys")
-        print("5. Identificar vulnerabilidades SQL")
-        print("6. Créditos")
-        print("7. Grupo do Telegram")
-        print("8. Sair")
+        print("1. Consultar IP")
+        print("2. Verificar portas")
+        print("3. Verificar SSL/TLS")
+        print("4. Verificar protocolo (UDP/TCP)")
+        print("5. Verificar site online por Proxys")
+        print("6. Identificar vulnerabilidades SQL")
+        print("7. Consultar informações WHOIS")
+        print("8. Buscar subdomínios")
+        print("9. Simular teste de força bruta")
+        print("10. Expo. em bases de dados de brechas de dados")
+        print("11. Créditos")
+        print("12. Grupo do Telegram")
+        print("13. Sair")
 
-        opcao = input("\nDigite o número da opção desejada: ")
+        opcao = input("\nEscolha uma opção: ")
 
         if opcao == "1":
             site = input("Digite o nome do site: ")
@@ -114,18 +72,34 @@ if __name__ == "__main__":
             verificar_portas(site)
         elif opcao == "3":
             site = input("Digite o nome do site: ")
-            consultar_protocolo(site)
+            verificar_seguranca_ssl(site)
         elif opcao == "4":
             site = input("Digite o nome do site: ")
-            verificar_site_proxy(site)
+            verificar_protocolo(site)
         elif opcao == "5":
             site = input("Digite o nome do site: ")
-            identificar_vulnerabilidades_sql(site)
+            verificar_site_proxy(site)
         elif opcao == "6":
-            creditos()
+            site = input("Digite o nome do site: ")
+            identificar_vulnerabilidades_sql(site)
         elif opcao == "7":
-            grupo_telegram()
+            site = input("Digite o nome do site: ")
+            consultar_whois(site)
         elif opcao == "8":
+            site = input("Digite o nome do site: ")
+            buscar_subdominios(site)
+        elif opcao == "9":
+            site = input("Digite o nome do site: ")
+            usuario = input("Digite o usuário alvo: ")
+            simular_teste_forca_bruta(site, usuario)
+        elif opcao == "10":
+            site = input("Digite o nome do site: ")
+            expo_brechas_dados(site)
+        elif opcao == "11":
+            creditos()
+        elif opcao == "12":
+            grupo_telegram()
+        elif opcao == "13":
             print("Encerrando o programa...")
             break
         else:
