@@ -19,25 +19,20 @@ def consultar_ip(site):
 # Função para verificar as portas abertas de um site
 def verificar_portas(site):
     try:
-        print(f"\nVerificando as 5 primeiras portas abertas de {site}...")
+        print(f"\nVerificando as portas abertas de {site}...")
         count_portas_abertas = 0  # Variável para contar as portas abertas
 
-        for porta in range(1, 6):
+        for porta in range(1, 65536):  # Alterado para verificar até a porta 65535
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(2)
             resultado = sock.connect_ex((site, porta))
             if resultado == 0:
                 print(f"A porta {porta} está aberta.")
                 count_portas_abertas += 1
-                if count_portas_abertas >= 2:  # Para aqui se encontrar pelo menos 2 portas abertas
-                    break
-            else:
-                print(f"A porta {porta} está fechada.")
+                break  # Para aqui assim que encontrar uma porta aberta
 
         if count_portas_abertas == 0:
             print("Nenhuma porta aberta encontrada.")
-        elif count_portas_abertas == 1:
-            print("Apenas uma porta aberta encontrada.")
         else:
             print(f"Total de {count_portas_abertas} portas abertas encontradas.")
 
